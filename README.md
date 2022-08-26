@@ -1,8 +1,4 @@
-# DataEngineerChallenge
-
-This is an interview challenge for PayPay. Please feel free to fork. Pull Requests will be ignored.
-
-The challenge is to make make analytical observations about the data using the distributed tools below.
+# DataEngineerChallengeAnswer
 
 ## Processing & Analytical goals:
 
@@ -15,49 +11,25 @@ The challenge is to make make analytical observations about the data using the d
 
 4. Find the most engaged users, ie the IPs with the longest session times
 
-## Additional questions for Machine Learning Engineer (MLE) candidates:
-1. Predict the expected load (requests/second) in the next minute
+## Tools Used:
+- Spark (PySpark)
+- Jupyter Notebook (.ipynb file included)
 
-2. Predict the session length for a given IP
+## Additional Library Used:
+- Pandas
+- Gzip
+- AwsLogParser
 
-3. Predict the number of unique URL visits by a given IP
-
-## Tools allowed (in no particular order):
-- Spark (any language, but prefer Scala or Java)
-- Pig
-- MapReduce (Hadoop 2.x only)
-- Flink
-- Cascading, Cascalog, or Scalding
-
-If you need Hadoop, we suggest 
-HDP Sandbox:
-http://hortonworks.com/hdp/downloads/
-or 
-CDH QuickStart VM:
-http://www.cloudera.com/content/cloudera/en/downloads.html
-
-
-### Additional notes:
-- You are allowed to use whatever libraries/parsers/solutions you can find provided you can explain the functions you are implementing in detail.
-- IP addresses do not guarantee distinct users, but this is the limitation of the data. As a bonus, consider what additional data would help make better analytical conclusions
-- For this dataset, complete the sessionization by time window rather than navigation. Feel free to determine the best session window time on your own, or start with 15 minutes.
-- The log file was taken from an AWS Elastic Load Balancer:
-http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/access-log-collection.html#access-log-entry-format
-
-
-
-## How to complete this challenge:
-
-1. Fork this repo in github
-2. Complete the processing and analytics as defined first to the best of your ability with the time provided.
-3. Place notes in your code to help with clarity where appropriate. Make it readable enough to present to the PayPay interview team.
-4. Include the test code and data in your solution. 
-5. Complete your work in your own github repo and send the results to us and/or present them during your interview.
-
-## What are we looking for? What does this prove?
-
-We want to see how you handle:
-- New technologies and frameworks
-- Messy (ie real) data
-- Understanding data transformation
-This is not a pass or fail test, we want to hear about your challenges and your successes with this particular problem.
+## How to Read the Answer:
+- All of the functions related to each of the answers are included in the `answer.py` script file. The `.ipynb` file is also included if you want to run it via Jupyter Notebook.
+- The script has been given several comments to give more context on which function answers which question, as well as on how the logic works.
+- In general, the way script works are:
+   - Unarchive the log file and parse it using AwsLogParser library, convert to pandas dataframe
+   - Add some additional column needed to answer the question
+   - Open the Spark session, convert the pandas dataframe to spark dataframe. Schema defined manually based on the AWS ELB log format
+   - Do some preprocessing by adding some more columns needed
+   - **Answer no.1**: Adding session id column per client ip with the 15 mins (900 secs) window of inactivity.
+   - **Answer no.2**: Aggregating all total time per session id
+   - **Answer no.3**: Count unique URLs hit per session
+   - **Answer no.4**: Count total time per client ip from all session
+- There are `sample_log` files in data directory which I used as a sample to do the analysis (contains 200 out of total of 20k rows) in order to reduce the resource needed. Change the `sample_log` lines in the script to the original file name if you want to run it using the original data.
